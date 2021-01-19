@@ -4,8 +4,6 @@ var cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv/config");
 
-app.use(cors());
-
 //WothiQggDIPmqBYc
 //connect to mongoDB
 mongoose.connect(
@@ -16,6 +14,7 @@ mongoose.connect(
 
 const app = express(); // initialie express
 //we use this middleware to access the body of the request
+app.use(cors());
 
 app.use(express.json());
 
