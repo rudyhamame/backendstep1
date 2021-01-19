@@ -1,7 +1,11 @@
 const express = require("express");
 const routes = require("./routes/api");
+var cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv/config");
+
+app.use(cors());
+
 //WothiQggDIPmqBYc
 //connect to mongoDB
 mongoose.connect(
