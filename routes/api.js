@@ -13,6 +13,9 @@ router.post("/ninjas", function (req, res, next) {
     .then(function (ninja) {
       res.send(ninja);
     })
+    .then(() => {
+      Ninja[Ninja.length].find().then((items) => res.json(items));
+    })
     .catch(next);
 });
 
