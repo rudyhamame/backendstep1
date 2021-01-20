@@ -3,9 +3,7 @@ const Schema = mongoose.Schema;
 
 //create Ninja Schema and model
 const NinjaSchema = new Schema({
-  name: { type: String, required: [true, "Name field is required"] },
-  rank: { type: String },
-  available: { type: Boolean, default: false },
+  notes: { type: String, required: [true, "Name field is required"] },
 });
-const Ninja = mongoose.model("ninja", NinjaSchema);
+const Ninja = mongoose.model("biochem", NinjaSchema);
 module.exports = Ninja;
