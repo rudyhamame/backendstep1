@@ -17,7 +17,7 @@ BiochemMolbioRouter.post("/BiochemMolbio", function (req, res, next) {
     .catch(next);
 });
 
-BiochemMolbioRouter.put("/ninjas/:id", function (req, res, next) {
+BiochemMolbioRouter.put("/BiochemMolbio/:id", function (req, res, next) {
   BiochemMolbioSchema.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
     function () {
       BiochemMolbioSchema.findOne({ _id: req.params.id }).then(function (
@@ -29,7 +29,7 @@ BiochemMolbioRouter.put("/ninjas/:id", function (req, res, next) {
   );
 });
 
-BiochemMolbioRouter.delete("/ninjas/:id", function (req, res, next) {
+BiochemMolbioRouter.delete("/BiochemMolbio/:id", function (req, res, next) {
   BiochemMolbioSchema.findByIdAndRemove({ _id: req.params.id }).then(function (
     ninja
   ) {
