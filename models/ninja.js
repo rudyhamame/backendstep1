@@ -5,5 +5,5 @@ const Schema = mongoose.Schema;
 const NinjaSchema = new Schema({
   notes: { type: String, required: [true, "Name field is required"] },
 });
-const Ninja = mongoose.model("Rudy", NinjaSchema);
+const Ninja = mongoose.model("step1", NinjaSchema);
 module.exports = Ninja;
