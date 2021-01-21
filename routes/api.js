@@ -3,7 +3,7 @@ const Ninja = require("../models/ninja");
 const router = express.Router();
 
 //get a list of nonjas the the db
-router.get("/ninjas", function (req, res, next) {
+router.get("/BiochemMolbio", function (req, res, next) {
   Ninja.find().then((items) => res.json(items));
 });
 
