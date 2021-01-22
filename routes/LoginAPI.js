@@ -7,4 +7,12 @@ const LoginRouter = express.Router();
 LoginRouter.get("/login", function (req, res, next) {
   LoginModel.find().then((items) => res.json(items));
 });
+
+LoginRouter.post("/login", function (req, res, next) {
+  LoginModel.create(req.body)
+    .then(function (ninja) {
+      res.send(ninja);
+    })
+    .catch(next);
+});
 module.exports = LoginRouter;
