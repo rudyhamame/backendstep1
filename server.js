@@ -1,6 +1,8 @@
 const express = require("express");
 const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
 const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
+const LoginAPI = require("./routes/LoginAPI");
+
 var cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv/config");
@@ -22,6 +24,7 @@ app.use(express.json());
 //initialize routes
 app.use("/api", BioOfCellsNotesAPI);
 app.use("/api", BiochemMolbioNotesAPI);
+app.use("/", LoginAPI);
 
 //error handling middleware
 app.use(function (err, req, res, next) {
