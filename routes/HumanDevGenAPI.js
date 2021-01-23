@@ -9,7 +9,7 @@ HumanDevGenRouter.get("/HumanDevGen", function (req, res, next) {
 });
 
 //app a new nonja to the db
-HumanDevGenRouter.post("/ninjas", function (req, res, next) {
+HumanDevGenRouter.post("/HumanDevGen", function (req, res, next) {
   HumanDevGenSchema.create(req.body)
     .then(function (ninja) {
       res.send(ninja);
@@ -17,7 +17,7 @@ HumanDevGenRouter.post("/ninjas", function (req, res, next) {
     .catch(next);
 });
 
-HumanDevGenRouter.put("/ninjas/:id", function (req, res, next) {
+HumanDevGenRouter.put("/HumanDevGen/:id", function (req, res, next) {
   HumanDevGenSchema.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
     function () {
       HumanDevGenSchema.findOne({ _id: req.params.id }).then(function (ninja) {
@@ -27,7 +27,7 @@ HumanDevGenRouter.put("/ninjas/:id", function (req, res, next) {
   );
 });
 
-HumanDevGenRouter.delete("/ninjas/:id", function (req, res, next) {
+HumanDevGenRouter.delete("/HumanDevGen/:id", function (req, res, next) {
   HumanDevGenSchema.findByIdAndRemove({ _id: req.params.id }).then(function (
     ninja
   ) {

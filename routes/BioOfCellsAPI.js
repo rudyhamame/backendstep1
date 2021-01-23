@@ -9,7 +9,7 @@ BioOfCellsRouter.get("/BioOfCells", function (req, res, next) {
 });
 
 //app a new nonja to the db
-BioOfCellsRouter.post("/ninjas", function (req, res, next) {
+BioOfCellsRouter.post("/BioOfCells", function (req, res, next) {
   BioOfCellsSchema.create(req.body)
     .then(function (ninja) {
       res.send(ninja);
@@ -17,7 +17,7 @@ BioOfCellsRouter.post("/ninjas", function (req, res, next) {
     .catch(next);
 });
 
-BioOfCellsRouter.put("/ninjas/:id", function (req, res, next) {
+BioOfCellsRouter.put("/BioOfCells/:id", function (req, res, next) {
   BioOfCellsSchema.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
     function () {
       BioOfCellsSchema.findOne({ _id: req.params.id }).then(function (ninja) {
@@ -27,7 +27,7 @@ BioOfCellsRouter.put("/ninjas/:id", function (req, res, next) {
   );
 });
 
-BioOfCellsRouter.delete("/ninjas/:id", function (req, res, next) {
+BioOfCellsRouter.delete("/BioOfCells/:id", function (req, res, next) {
   BioOfCellsSchema.findByIdAndRemove({ _id: req.params.id }).then(function (
     ninja
   ) {
