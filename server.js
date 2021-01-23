@@ -1,4 +1,5 @@
 const express = require("express");
+const HumanDevGenNotesAPI = require("./routes/HumanDevGenAPI");
 const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
 const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
 const LoginAPI = require("./routes/LoginAPI");
@@ -22,6 +23,8 @@ app.use(cors());
 app.use(express.json());
 
 //initialize routes
+
+app.use("/api", HumanDevGenNotesAPI);
 app.use("/api", BioOfCellsNotesAPI);
 app.use("/api", BiochemMolbioNotesAPI);
 app.use("/", LoginAPI);
