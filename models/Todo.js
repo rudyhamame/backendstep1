@@ -1,0 +1,11 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+//create Ninja Schema and model
+const TodoSchema = new Schema({
+  task: { type: String, required: true },
+  deadline: { type: String, required: true },
+  status: { type: Boolean, required: true },
+});
+const Todo = mongoose.model("Todo", TodoSchema);
+module.exports = Todo;
