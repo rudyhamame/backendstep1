@@ -5,7 +5,10 @@ const TodoRouter = express.Router();
 
 //get a list of ninjas the the db
 TodoRouter.get("/Todo", function (req, res, next) {
-  TodoSchema.find({}).then((items) => res.json(items));
+  const searchField = req.query.task;
+  TodoSchema.find({
+    name: { $regex: searchField, $options: "$i" },
+  }).then((items) => res.json(items));
 });
 
 //app a new nonja to the db
