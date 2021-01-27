@@ -3,9 +3,9 @@ const TodoSchema = require("../models/Todo");
 
 const TodoRouter = express.Router();
 
-//get a list of nonjas the the db
+//get a list of ninjas the the db
 TodoRouter.get("/Todo", function (req, res, next) {
-  TodoSchema.find().then((items) => res.json(items));
+  TodoSchema.find({}, { deadline: 0 }).then((items) => res.json(items));
 });
 
 //app a new nonja to the db
