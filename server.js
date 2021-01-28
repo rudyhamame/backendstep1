@@ -4,6 +4,7 @@ const HumanDevGenNotesAPI = require("./routes/HumanDevGenAPI");
 const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
 const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
 const LoginAPI = require("./routes/LoginAPI");
+const TodoSearchAPI = require("./routes/search/TodoSearchAPI");
 
 var cors = require("cors");
 const mongoose = require("mongoose");
@@ -29,6 +30,8 @@ app.use("/api", HumanDevGenNotesAPI);
 app.use("/api", BioOfCellsNotesAPI);
 app.use("/api", BiochemMolbioNotesAPI);
 app.use("/", LoginAPI);
+
+app.use("/api", TodoSearchAPI);
 
 //error handling middleware
 app.use(function (err, req, res, next) {
