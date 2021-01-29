@@ -1,41 +1,37 @@
 const express = require("express");
-const BiochemMolbioSchema = require("../models/BiochemMolbio");
+const NotesModel = require("../models/Notes");
 
-const BiochemMolbioRouter = express.Router();
+const expressRouter = express.Router();
 
 //get a list of nonjas the the db
-BiochemMolbioRouter.get("/BiochemMolbio", function (req, res, next) {
-  BiochemMolbioSchema.find().then((items) => res.json(items));
+expressRouter.get("/BiochemMolbio", function (req, res, next) {
+  NotesModel.find().then((result) => res.json(result));
 });
 
 //app a new nonja to the db
-BiochemMolbioRouter.post("/BiochemMolbio", function (req, res, next) {
-  BiochemMolbioSchema.create(req.body)
-    .then(function (ninja) {
-      res.send(ninja);
+expressRouter.post("/BiochemMolbio", function (req, res, next) {
+  NotesModel.create(req.body)
+    .then(function (result) {
+      res.send(result);
     })
     .catch(next);
 });
 
-BiochemMolbioRouter.put("/BiochemMolbio/:id", function (req, res, next) {
-  BiochemMolbioSchema.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
+expressRouter.put("/BiochemMolbio/:id", function (req, res, next) {
+  NotesModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
     function () {
-      BiochemMolbioSchema.findOne({ _id: req.params.id }).then(function (
-        ninja
-      ) {
-        res.send(ninja);
+      NotesModel.findOne({ _id: req.params.id }).then(function (result) {
+        res.send(result);
       });
     }
   );
 });
 
-BiochemMolbioRouter.delete("/BiochemMolbio/:id", function (req, res, next) {
-  BiochemMolbioSchema.findByIdAndRemove({ _id: req.params.id }).then(function (
-    ninja
-  ) {
-    res.send(ninja);
+expressRouter.delete("/BiochemMolbio/:id", function (req, res, next) {
+  NotesModel.findByIdAndRemove({ _id: req.params.id }).then(function (result) {
+    res.send(result);
   });
 });
 
 //Attach all the routes to router\
-module.exports = BiochemMolbioRouter;
+module.exports = expressRouter;

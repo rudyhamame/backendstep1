@@ -1,35 +1,35 @@
 const express = require("express");
-const TodoSchema = require("../models/Todo");
+const TodoModel = require("../models/Todo");
 
 const TodoRouter = express.Router();
 
-//get a list of ninjas the the db
+//get a list of results the the db
 TodoRouter.get("/Todo", function (req, res, next) {
-  TodoSchema.find({}).then((result) => res.json(result));
+  TodoModel.find({}).then((result) => res.json(result));
 });
 
 //app a new nonja to the db
 TodoRouter.post("/Todo", function (req, res, next) {
-  TodoSchema.create(req.body)
-    .then(function (ninja) {
-      res.send(ninja);
+  TodoModel.create(req.body)
+    .then(function (result) {
+      res.send(result);
     })
     .catch(next);
 });
 
 TodoRouter.put("/Todo/:id", function (req, res, next) {
-  TodoSchema.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
+  TodoModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
     function () {
-      TodoSchema.findOne({ _id: req.params.id }).then(function (ninja) {
-        res.send(ninja);
+      TodoModel.findOne({ _id: req.params.id }).then(function (result) {
+        res.send(result);
       });
     }
   );
 });
 
 TodoRouter.delete("/Todo/:id", function (req, res, next) {
-  TodoSchema.findByIdAndRemove({ _id: req.params.id }).then(function (ninja) {
-    res.send(ninja);
+  TodoModel.findByIdAndRemove({ _id: req.params.id }).then(function (result) {
+    res.send(result);
   });
 });
 

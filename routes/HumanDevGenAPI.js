@@ -1,39 +1,37 @@
 const express = require("express");
-const HumanDevGenSchema = require("../models/HumanDevGen");
+const NotesModel = require("../models/Notes");
 
-const HumanDevGenRouter = express.Router();
+const expressRouter = express.Router();
 
 //get a list of nonjas the the db
-HumanDevGenRouter.get("/HumanDevGen", function (req, res, next) {
-  HumanDevGenSchema.find().then((items) => res.json(items));
+expressRouter.get("/HumanDevGen", function (req, res, next) {
+  NotesModel.find().then((result) => res.json(result));
 });
 
 //app a new nonja to the db
-HumanDevGenRouter.post("/HumanDevGen", function (req, res, next) {
-  HumanDevGenSchema.create(req.body)
-    .then(function (ninja) {
-      res.send(ninja);
+expressRouter.post("/HumanDevGen", function (req, res, next) {
+  NotesModel.create(req.body)
+    .then(function (result) {
+      res.send(result);
     })
     .catch(next);
 });
 
-HumanDevGenRouter.put("/HumanDevGen/:id", function (req, res, next) {
-  HumanDevGenSchema.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
+expressRouter.put("/HumanDevGen/:id", function (req, res, next) {
+  NotesModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
     function () {
-      HumanDevGenSchema.findOne({ _id: req.params.id }).then(function (ninja) {
-        res.send(ninja);
+      NotesModel.findOne({ _id: req.params.id }).then(function (result) {
+        res.send(result);
       });
     }
   );
 });
 
-HumanDevGenRouter.delete("/HumanDevGen/:id", function (req, res, next) {
-  HumanDevGenSchema.findByIdAndRemove({ _id: req.params.id }).then(function (
-    ninja
-  ) {
-    res.send(ninja);
+expressRouter.delete("/HumanDevGen/:id", function (req, res, next) {
+  NotesModel.findByIdAndRemove({ _id: req.params.id }).then(function (result) {
+    res.send(result);
   });
 });
 
 //Attach all the routes to router\
-module.exports = HumanDevGenRouter;
+module.exports = expressRouter;

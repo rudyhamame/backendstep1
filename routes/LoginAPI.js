@@ -5,13 +5,13 @@ const LoginRouter = express.Router();
 
 //get a list of nonjas the the db
 LoginRouter.get("/login", function (req, res, next) {
-  LoginModel.find().then((items) => res.json(items));
+  LoginModel.find().then((result) => res.json(result));
 });
 
 LoginRouter.post("/login", function (req, res, next) {
   LoginModel.create(req.body)
-    .then(function (ninja) {
-      res.send(ninja);
+    .then(function (result) {
+      res.send(result);
     })
     .catch(next);
 });
