@@ -8,7 +8,7 @@ const NotesSchema = new Schema({
   subject: { type: String, required: true },
   textbook: { type: String, required: false },
   page: { type: String, required: false },
-  date: { type: new Date() },
+  date: { type: Date, default: Date.now() },
 });
 const NotesModel = mongoose.model("NotesModel", NotesSchema);
 module.exports = NotesModel;
