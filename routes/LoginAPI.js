@@ -15,4 +15,14 @@ LoginRouter.post("/login", function (req, res, next) {
     })
     .catch(next);
 });
+
+LoginRouter.put("/login/:id", function (req, res, next) {
+  LoginModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
+    function () {
+      LoginModel.findOne({ _id: req.params.id }).then(function (result) {
+        res.send(result);
+      });
+    }
+  );
+});
 module.exports = LoginRouter;
