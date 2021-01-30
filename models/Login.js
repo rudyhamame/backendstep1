@@ -8,7 +8,7 @@ const LoginSchema = new Schema({
   email: { type: String, required: true },
   dob: { type: Date, required: true },
   phone_number: { type: Number, required: false },
-  isConnnected: { type: Boolean, required: true },
+  isConnnected: { type: Boolean, default: false },
 });
 const LoginModel = mongoose.model("Login", LoginSchema);
 module.exports = LoginModel;
