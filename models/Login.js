@@ -9,6 +9,7 @@ const LoginSchema = new Schema({
   dob: { type: Date, required: true },
   phone_number: { type: Number, required: false },
   isConnected: { type: Boolean, default: false },
+  role: { type: String, default: "user" },
 });
 const LoginModel = mongoose.model("Login", LoginSchema);
 module.exports = LoginModel;
