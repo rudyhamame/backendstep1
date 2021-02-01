@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 //create Ninja Schema and model
 const FriendsListSchema = new Schema({
+  first_name: { type: String, required: true },
+  last_name: { type: String, required: true },
   username: { type: String, required: true },
-  phone_number: { type: Number, required: false },
 });
 const FriendsListModel = mongoose.model("FriendsList", FriendsListSchema);
 module.exports = FriendsListModel;

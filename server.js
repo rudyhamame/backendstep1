@@ -25,13 +25,13 @@ app.use(cors());
 app.use(express.json());
 
 //initialize routes
-app.use("/api", TodoAPI);
-app.use("/api", HumanDevGenNotesAPI);
-app.use("/api", BioOfCellsNotesAPI);
-app.use("/api", BiochemMolbioNotesAPI);
+// app.use("/api", TodoAPI);
+// app.use("/api", HumanDevGenNotesAPI);
+// app.use("/api", BioOfCellsNotesAPI);
+// app.use("/api", BiochemMolbioNotesAPI);
 app.use("/", LoginAPI);
 
-app.use("/api", TodoSearchAPI);
+// app.use("/api", TodoSearchAPI);
 
 //error handling middleware
 app.use(function (err, req, res, next) {
