@@ -29,20 +29,19 @@ const ConnectionStatusSchema = new Schema({
 const IdSchema = new Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
-  email: { type: String, required: true },
-  dob: { type: Date, required: true },
+  email: { type: String, required: false },
+  dob: { type: Date, required: false },
   phone_number: { type: Number, required: false },
   role: { type: String, default: "user" },
 });
 //create Ninja Schema and model
 const UserSchema = new Schema({
-  credentials: [CredentialsSchema],
-  id: [IdSchema],
-  connection_status: [ConnectionStatusSchema],
+  credentials: CredentialsSchema,
+  id: IdSchema,
+  connection_status: ConnectionStatusSchema,
   friends_list: [FriendsListSchema],
   notes: [NotesSchema],
   todo: [TodoSchema],
-  role: { type: String, default: "user" },
 });
 const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;

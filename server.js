@@ -1,22 +1,27 @@
 const express = require("express");
-const TodoAPI = require("./routes/TodoAPI");
-const HumanDevGenNotesAPI = require("./routes/HumanDevGenAPI");
-const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
-const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
-const LoginAPI = require("./routes/LoginAPI");
-const TodoSearchAPI = require("./routes/search/TodoSearchAPI");
+// const TodoAPI = require("./routes/TodoAPI");
+// const HumanDevGenNotesAPI = require("./routes/HumanDevGenAPI");
+// const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
+// const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
+const CredentialsAPI = require("./routes/CredentialsAPI");
+// const UserAPI = require("./routes/UserAPI");
+// const TodoSearchAPI = require("./routes/search/TodoSearchAPI");
 
 var cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv/config");
 
-//WothiQggDIPmqBYc
-//connect to mongoDB
-mongoose.connect(
-  process.env.DB_CONNECTION,
-  { useNewUrlParser: true },
-  { useUnifiedTopology: true }
-);
+//////////////////////////connect to mongoDB///////////////////////////////
+mongoose.connect(process.env.DB_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function () {
+  console.log("database is connected!");
+});
+////////////////////////////////////////////////////////////////////
 
 const app = express(); // initialie express
 //we use this middleware to access the body of the request
@@ -25,11 +30,12 @@ app.use(cors());
 app.use(express.json());
 
 //initialize routes
+// app.use("/", UserAPI);
 // app.use("/api", TodoAPI);
 // app.use("/api", HumanDevGenNotesAPI);
 // app.use("/api", BioOfCellsNotesAPI);
 // app.use("/api", BiochemMolbioNotesAPI);
-app.use("/", LoginAPI);
+app.use("/api", CredentialsAPI);
 
 // app.use("/api", TodoSearchAPI);
 
