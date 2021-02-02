@@ -4,6 +4,8 @@ const express = require("express");
 // const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
 // const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
 const CredentialsAPI = require("./routes/CredentialsAPI");
+const ConnectionStatusAPI = require("./routes/ConnectionStatusAPI");
+
 // const UserAPI = require("./routes/UserAPI");
 // const TodoSearchAPI = require("./routes/search/TodoSearchAPI");
 
@@ -36,7 +38,7 @@ app.use(express.json());
 // app.use("/api", BioOfCellsNotesAPI);
 // app.use("/api", BiochemMolbioNotesAPI);
 app.use("/api", CredentialsAPI);
-
+app.use("/api", ConnectionStatusAPI);
 // app.use("/api", TodoSearchAPI);
 
 //error handling middleware

@@ -12,7 +12,6 @@ const NotesSchema = new Schema({
 const CredentialsSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
-  is_connected: { type: Boolean, default: false },
 });
 const FriendsListSchema = new Schema({
   first_name: { type: String, required: true },
@@ -23,9 +22,7 @@ const TodoSchema = new Schema({
   task: { type: String, required: true },
   deadline: { type: Date, required: true },
 });
-const ConnectionStatusSchema = new Schema({
-  is_loggedin: { type: Boolean, default: false },
-});
+
 const IdSchema = new Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
@@ -38,10 +35,10 @@ const IdSchema = new Schema({
 const UserSchema = new Schema({
   credentials: CredentialsSchema,
   id: IdSchema,
-  connection_status: ConnectionStatusSchema,
   friends_list: [FriendsListSchema],
   notes: [NotesSchema],
   todo: [TodoSchema],
+  is_loggingin: { type: Boolean, required: true, default: false },
 });
 const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;
