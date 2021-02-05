@@ -1,37 +1,64 @@
 const express = require("express");
-const TodoModel = require("../models/Todo");
+const UserModel = require("../models/Users");
 
-const TodoRouter = express.Router();
+const UserRouter = express.Router();
 
-//get a list of results the the db
-TodoRouter.get("/Todo", function (req, res, next) {
-  TodoModel.find({}).then((result) => res.json(result));
+//Get todolist of a specific user
+UserRouter.get("/user/todolist/:id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.id })
+    .then((user_todolist) => res.json(user_todolist.todolist))
+    .catch(next);
 });
 
-//app a new nonja to the db
-TodoRouter.post("/Todo", function (req, res, next) {
-  TodoModel.create(req.body)
-    .then(function (result) {
-      res.send(result);
+//Add new todo to a specific user
+UserRouter.post("/user/todolist/:id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.id })
+    .then(function (user) {
+      user.todolist.push(req.body);
+      return user.save();
+    })
+    .then(function (user) {
+      res.json(user.todolist.pop());
     })
     .catch(next);
 });
 
-TodoRouter.put("/Todo/:id", function (req, res, next) {
-  TodoModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
-    function () {
-      TodoModel.findOne({ _id: req.params.id }).then(function (result) {
-        res.send(result);
-      });
-    }
-  );
-});
-
-TodoRouter.delete("/Todo/:id", function (req, res, next) {
-  TodoModel.findByIdAndRemove({ _id: req.params.id }).then(function (result) {
-    res.send(result);
-  });
+//Edit a specific todo of a specific user by id and idtodolist
+UserRouter.put(
+  "/user/todolist/:id/:todoid/:newtodo",
+  function (req, res, next) {
+    UserModel.findOne({ _id: req.params.id })
+      .then(function (user) {
+        var index = user.todolist.findIndex(
+          (todo) => todo.id === req.params.todoid
+        );
+        user.todolist[index].task = req.params.newtodo;
+        user.todolist[index].state = "edited";
+        user.save();
+        return user;
+      })
+      .then(function (user) {
+        res.json(user.todolist);
+      })
+      .catch(next);
+  }
+);
+//Delete a specific todo of a specific user by id and idtodolist
+UserRouter.delete("/user/todolist/:id/:todoid", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.id })
+    .then(function (user) {
+      var index = user.todolist.findIndex(
+        (todo) => todo.id === req.params.todoid
+      );
+      user.todolist[index].remove();
+      user.save();
+      return "Successfully deleted";
+    })
+    .then(function (result) {
+      res.json(result);
+    })
+    .catch(next);
 });
 
 //Attach all the routes to router\
-module.exports = TodoRouter;
+module.exports = UserRouter;

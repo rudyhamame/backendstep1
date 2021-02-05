@@ -1,8 +1,9 @@
 const express = require("express");
-// const TodoAPI = require("./routes/TodoAPI");
+const TodoAPI = require("./routes/TodoAPI");
 // const HumanDevGenNotesAPI = require("./routes/HumanDevGenAPI");
 // const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
-// const BiochemMolbioNotesAPI = require("./routes/BiochemMolbioAPI");
+const UserAPI = require("./routes/UserAPI");
+const NotesAPI = require("./routes/NotesAPI");
 const CredentialsAPI = require("./routes/CredentialsAPI");
 const ConnectionStatusAPI = require("./routes/ConnectionStatusAPI");
 
@@ -32,11 +33,11 @@ app.use(cors());
 app.use(express.json());
 
 //initialize routes
-// app.use("/", UserAPI);
-// app.use("/api", TodoAPI);
+app.use("/", UserAPI);
+app.use("/api", TodoAPI);
 // app.use("/api", HumanDevGenNotesAPI);
 // app.use("/api", BioOfCellsNotesAPI);
-// app.use("/api", BiochemMolbioNotesAPI);
+app.use("/api", NotesAPI);
 app.use("/api", CredentialsAPI);
 app.use("/api", ConnectionStatusAPI);
 // app.use("/api", TodoSearchAPI);

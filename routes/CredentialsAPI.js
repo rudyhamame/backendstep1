@@ -6,7 +6,7 @@ const CredentialsRouter = express.Router();
 //get a list of nonjas the the db
 CredentialsRouter.get("/user/credentials", function (req, res, next) {
   UserModel.findOne({
-    "credentials.username": req.query.username,
+    username: req.query.username,
   }).then((result) => res.json(result));
 });
 
