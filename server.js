@@ -1,17 +1,13 @@
-const express = require("express");
-const TodoAPI = require("./routes/TodoAPI");
-// const HumanDevGenNotesAPI = require("./routes/HumanDevGenAPI");
-// const BioOfCellsNotesAPI = require("./routes/BioOfCellsAPI");
-const UserAPI = require("./routes/UserAPI");
-const NotesAPI = require("./routes/NotesAPI");
-const CredentialsAPI = require("./routes/CredentialsAPI");
-const ConnectionStatusAPI = require("./routes/ConnectionStatusAPI");
-
-// const UserAPI = require("./routes/UserAPI");
-// const TodoSearchAPI = require("./routes/search/TodoSearchAPI");
-
-var cors = require("cors");
+const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cors = require("cors");
+const express = require("express");
+const app = express(); // initialie express
+////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////
+const UserAPI = require("./routes/UserAPI");
+const ChatAPI = require("./routes/ChatAPI");
 require("dotenv/config");
 
 //////////////////////////connect to mongoDB///////////////////////////////
@@ -26,25 +22,22 @@ db.once("open", function () {
 });
 ////////////////////////////////////////////////////////////////////
 
-const app = express(); // initialie express
 //we use this middleware to access the body of the request
 app.use(cors());
-
+app.use(morgan("dev"));
 app.use(express.json());
 
 //initialize routes
-app.use("/", UserAPI);
-app.use("/api", TodoAPI);
-// app.use("/api", HumanDevGenNotesAPI);
-// app.use("/api", BioOfCellsNotesAPI);
-app.use("/api", NotesAPI);
-app.use("/api", CredentialsAPI);
-app.use("/api", ConnectionStatusAPI);
-// app.use("/api", TodoSearchAPI);
+app.use("/api/user", UserAPI);
+app.use("/api/chat", ChatAPI);
 
-//error handling middleware
-app.use(function (err, req, res, next) {
-  res.status(422).send({ error: err.message });
+app.use(function (error, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    error: {
+      message: error.message,
+    },
+  });
 });
 
 app.listen(process.env.PORT || 4000, function () {
