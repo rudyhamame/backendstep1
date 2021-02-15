@@ -174,25 +174,6 @@ UserRouter.post("/acceptFriend/:my_id/:friend_id", function (req, res, next) {
       }
     });
 });
-// UserRouter.put("/user/:id", function (req, res, next) {
-//   UserModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then(
-//     function () {
-//       UserModel.findOne({ _id: req.params.id })
-//         .populate("user_friends")
-//         .execPopulate()
-//         .then(function (result) {
-//           res.send(result);
-//         })
-//         .catch(next);
-//     }
-//   );
-// });
-
-UserRouter.delete("/:id", function (req, res, next) {
-  UserModel.findByIdAndRemove({ _id: req.params.id }).then(function (result) {
-    res.send(result).catch(next);
-  });
-});
 
 ///////Update Notification INFO USER
 UserRouter.put("/editUserInfo/:me_id/:friend_id", function (req, res, next) {
