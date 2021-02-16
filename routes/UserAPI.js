@@ -116,6 +116,7 @@ UserRouter.get("/update/:id", checkAuth, function (req, res, next) {
     .select("token notes friends friend_requests notifications chat posts")
     .populate("friends", "info.firstname info.lastname status.isConnected")
     .populate("chat")
+    .populate("posts")
     .then((profile) => {
       res.status(200).json(profile);
     })
