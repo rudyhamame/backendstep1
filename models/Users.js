@@ -42,6 +42,15 @@ const UserSchema = new Schema({
       status: { type: String, default: "unread" },
     },
   ],
+  posts: [
+    {
+      note: { type: String, requred: true },
+      category: { type: String, requred: true },
+      subject: { type: String, requred: true },
+      reference: { type: String, requred: false },
+      page_num: { type: String, requred: false },
+    },
+  ],
 });
 const UserModel = mongoose.model("user", UserSchema);
 module.exports = UserModel;
