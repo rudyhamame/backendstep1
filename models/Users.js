@@ -49,7 +49,7 @@ const UserSchema = new Schema({
       subject: { type: String, required: true },
       reference: { type: String, required: false },
       page_num: { type: Number, required: false },
-      date: { type: Date, default: new Date() },
+      date: { type: Date, default: Date.now() },
     },
   ],
 });
