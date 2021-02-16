@@ -85,6 +85,8 @@ UserRouter.post("/signup", function (req, res, next) {
       }
     });
 });
+//PrepareMyChat
+
 UserRouter.put("/addNew/:my_id", function (req, res, next) {
   UserModel.findByIdAndUpdate(
     { _id: req.params.my_id },
@@ -98,8 +100,6 @@ UserRouter.put("/addNew/:my_id", function (req, res, next) {
       res.json(response);
     });
 });
-
-//PrepareMyChat
 
 //Modifiying User's Connection Status
 UserRouter.put("/connection/:id", function (req, res, next) {
@@ -234,7 +234,7 @@ UserRouter.post("/chat/send/:friendID", function (req, res, next) {
     .catch(next);
 });
 
-///////SENDING MESSAGE TO FRIEND
+///////POST A POST
 UserRouter.post("/posts/:my_id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
     .then((mine) => {
@@ -243,6 +243,17 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
     })
     .then((response) => {
       res.status(201).json(response);
+    })
+    .catch(next);
+});
+///////RETRIEVING POSTS
+UserRouter.get("/posts/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      return res.status(201).json(user);
+    })
+    .then((result) => {
+      return result.posts;
     })
     .catch(next);
 });
