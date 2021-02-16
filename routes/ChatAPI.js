@@ -2,6 +2,20 @@ const express = require("express");
 const ChatModel = require("../models/Chat");
 const ChatRouter = express.Router();
 
+///Add your chat
+ChatRouter.post("/addNew/:my_id", function (req, res, next) {
+  ChatModel.findOne({ _id: req.params.my_id })
+    .then((result) => {
+      if (result) {
+        return null;
+      } else {
+        ChatModel.create({ _id: req.params.my_id });
+      }
+    })
+    .then((result) => {
+      return res.status(201).json(result);
+    });
+});
 //Send to friend chat
 ChatRouter.post("/sendToFriend/:friendID", function (req, res, next) {
   ChatModel.findOne({ _id: req.params.friendID })
