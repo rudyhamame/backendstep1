@@ -42,7 +42,15 @@ const UserSchema = new Schema({
       status: { type: String, default: "unread" },
     },
   ],
-  posts: { type: Schema.Types.ObjectId, ref: "posts" },
+  posts: [
+    {
+      note: { type: String, required: true },
+      category: { type: String, required: true },
+      subject: { type: String, required: true },
+      reference: { type: String, required: false },
+      page_num: { type: Number, required: false },
+    },
+  ],
 });
 const UserModel = mongoose.model("user", UserSchema);
 module.exports = UserModel;

@@ -18,14 +18,7 @@ PostsRouter.post("/postAdd/:my_id", function (req, res, next) {
 /////////Add Posts area
 ///Add your chat
 PostsRouter.post("/create/:my_id", function (req, res, next) {
-  PostsModel.findOne({ _id: req.params.my_id })
-    .then((result) => {
-      if (result) {
-        return null;
-      } else {
-        PostsModel.create({ _id: req.params.my_id });
-      }
-    })
+  PostsModel.create({ _id: req.params.my_id })
     .then((result) => {
       return res.status(201).json(result);
     })

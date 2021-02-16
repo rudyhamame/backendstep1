@@ -6,16 +6,15 @@ const ChatRouter = express.Router();
 ChatRouter.post("/addNew/:my_id", function (req, res, next) {
   ChatModel.findOne({ _id: req.params.my_id })
     .then((result) => {
-      if (result) {
-        return null;
-      } else {
+      if (!result) {
         ChatModel.create({ _id: req.params.my_id });
       }
     })
     .then((result) => {
-      return res.status(201).json(result);
+      return res.json(result);
     });
 });
+
 //Send to friend chat
 ChatRouter.post("/sendToFriend/:friendID", function (req, res, next) {
   ChatModel.findOne({ _id: req.params.friendID })
