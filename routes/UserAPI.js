@@ -242,7 +242,7 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
       mine.save();
     })
     .then((response) => {
-      res.json(response);
+      res.status(201).json(response);
     })
     .catch(next);
 });
