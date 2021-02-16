@@ -239,10 +239,11 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
     .then((mine) => {
       mine.posts.push(req.body);
-      mine.save();
-    })
-    .then((response) => {
-      res.status(201).json(response);
+      mine.save(function (err) {
+        if (err) {
+          return res.status(500).json();
+        }
+      });
     })
     .catch(next);
 });
