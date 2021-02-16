@@ -113,7 +113,7 @@ UserRouter.put("/connection/:id", function (req, res, next) {
 ////////UpdateUser
 UserRouter.get("/update/:id", checkAuth, function (req, res, next) {
   UserModel.findOne({ _id: req.params.id })
-    .select("token notes friends friend_requests notifications chat")
+    .select("token notes friends friend_requests notifications chat posts")
     .populate("friends", "info.firstname info.lastname status.isConnected")
     .populate("chat")
     .then((profile) => {
@@ -243,15 +243,6 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
     })
     .then((response) => {
       res.status(201).json(response);
-    })
-    .catch(next);
-});
-///////RETRIEVING POSTS
-UserRouter.get("/posts/:my_id", function (req, res, next) {
-  UserModel.findOne({ _id: req.params.my_id })
-
-    .then((user) => {
-      res.status(201).json(user.posts);
     })
     .catch(next);
 });
