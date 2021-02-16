@@ -249,11 +249,9 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
 ///////RETRIEVING POSTS
 UserRouter.get("/posts/:my_id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
+
     .then((user) => {
-      return res.status(201).json(user);
-    })
-    .then((result) => {
-      return result.posts;
+      res.status(201).json(user.posts);
     })
     .catch(next);
 });
