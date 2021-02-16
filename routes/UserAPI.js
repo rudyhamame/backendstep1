@@ -234,18 +234,5 @@ UserRouter.post("/chat/send/:friendID", function (req, res, next) {
     .catch(next);
 });
 
-///////POST A POST
-UserRouter.post("/posts/:my_id", function (req, res, next) {
-  UserModel.findOne({ _id: req.params.my_id })
-    .then((mine) => {
-      mine.posts.push(req.body);
-      mine.save();
-    })
-    .then((response) => {
-      res.status(201).json(response);
-    })
-    .catch(next);
-});
-
 //Attach all the routes to router\
 module.exports = UserRouter;

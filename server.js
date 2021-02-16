@@ -8,6 +8,8 @@ const app = express(); // initialie express
 /////////////////////////////////////////////////////////////
 const UserAPI = require("./routes/UserAPI");
 const ChatAPI = require("./routes/ChatAPI");
+const PostsAPI = require("./routes/PostsAPI");
+
 require("dotenv/config");
 
 //////////////////////////connect to mongoDB///////////////////////////////
@@ -30,6 +32,7 @@ app.use(express.json());
 //initialize routes
 app.use("/api/user", UserAPI);
 app.use("/api/chat", ChatAPI);
+app.use("/api/posts", PostsAPI);
 
 app.use(function (error, req, res, next) {
   res.status(err.status || 500);
