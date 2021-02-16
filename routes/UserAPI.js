@@ -240,10 +240,10 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
     .then((mine) => {
       mine.posts.push(req.body);
       mine.save(function (err) {
-        if (err) {
-          return res.status(500).json();
-        } else {
+        if (!err) {
           return res.status(201).json();
+        } else {
+          return res.status(500).json();
         }
       });
     })
