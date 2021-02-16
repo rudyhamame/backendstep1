@@ -238,7 +238,7 @@ UserRouter.post("/chat/send/:friendID", function (req, res, next) {
 UserRouter.post("/posts/:my_id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
     .then((mine) => {
-      mine.posts.push(req.body);
+      mine.posts.unshift(req.body);
       mine.save(function (err) {
         if (!err) {
           return res.status(201).json();
