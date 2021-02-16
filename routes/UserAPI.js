@@ -85,9 +85,27 @@ UserRouter.post("/signup", function (req, res, next) {
       }
     });
 });
+UserRouter.put("/addNew/:my_id", function (req, res, next) {
+  UserModel.findByIdAndUpdate(
+    { _id: req.params.my_id },
+    { chat: req.params.my_id },
+    {
+      useFindAndModify: false,
+    }
+  )
+    .exec()
+    .then((response) => {
+      res.json(response);
+    });
+});
+
+//PrepareMyChat
+
 //Modifiying User's Connection Status
 UserRouter.put("/connection/:id", function (req, res, next) {
-  UserModel.findByIdAndUpdate({ _id: req.params.id }, req.body)
+  UserModel.findByIdAndUpdate({ _id: req.params.id }, req.body, {
+    useFindAndModify: false,
+  })
     .then((result) => res.json(result))
     .catch(next);
 });
