@@ -242,6 +242,8 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
       mine.save(function (err) {
         if (err) {
           return res.status(500).json();
+        } else {
+          return res.status(201).json();
         }
       });
     })
