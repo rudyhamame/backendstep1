@@ -247,6 +247,9 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
         }
       });
     })
+    .then((result) => {
+      return result;
+    })
     .catch(next);
 });
 
