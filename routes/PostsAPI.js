@@ -2,15 +2,19 @@ const express = require("express");
 const PostsModel = require("../models/Posts");
 const PostsRouter = express.Router();
 
-///////POST A POST
+///////POST A POST//The best architecture
 PostsRouter.post("/postAdd/:my_id", function (req, res, next) {
   PostsModel.findOne({ _id: req.params.my_id })
     .then((mine) => {
-      mine.posts.push(req.body);
-      mine.save();
+      mine.posts.unshift(req.body);
+      return mine.save();
     })
-    .then((response) => {
-      res.json(response);
+    .then((result) => {
+      if (result) {
+        res.status(201).json(result.posts.shift());
+      } else {
+        res.status(500).json();
+      }
     })
     .catch(next);
 });

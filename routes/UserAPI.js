@@ -234,17 +234,41 @@ UserRouter.post("/chat/send/:friendID", function (req, res, next) {
     .catch(next);
 });
 
-///////POST A POST
+///////POST A POST//The best architecture
 UserRouter.post("/posts/:my_id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
     .then((mine) => {
       mine.posts.push(req.body);
-      mine.save(function (err) {
-        if (!err) {
-          return res.status(201).json();
-        } else {
-          return res.status(500).json();
+      return mine.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json(result.posts.pop());
+      } else {
+        res.status(500).json();
+      }
+    })
+    .catch(next);
+});
+/////Searching in posts
+UserRouter.get("/searchPosts/:post/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((users) => {
+      const array = [];
+      users.posts.forEach((user) => {
+        if (
+          user.note === req.params.post ||
+          user.note.includes(req.params.post) ||
+          user.subject === req.params.post
+        ) {
+          array.push(user);
         }
+      });
+      return array;
+    })
+    .then((array2) => {
+      res.status(200).json({
+        array: array2,
       });
     })
     .catch(next);
