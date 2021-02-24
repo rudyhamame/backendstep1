@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv/config");
 const checkAuth = require("../check-auth");
 const { Schema } = require("mongoose");
+const PostsModel = require("../models/Posts");
 
 //Login API
 UserRouter.post("/login", function (req, res, next) {
@@ -260,109 +261,111 @@ UserRouter.get(
   "/searchPosts/:keyword/:subject/:category/:my_id",
   function (req, res, next) {
     UserModel.findOne({ _id: req.params.my_id })
-      .then((users) => {
+      .then((mine) => {
         const array = [];
-        users.posts.forEach((user) => {
-          if (
-            req.params.keyword !== "$" &&
-            req.params.subject === "$" &&
-            req.params.category === "$"
-          ) {
+        mine.posts.forEach((post) => {
+          PostsModel.findOne({ _id: post }).then((user) => {
             if (
-              String(user.note).toLowerCase() ===
-                req.params.keyword.toLowerCase() ||
-              String(user.note)
-                .toLowerCase()
-                .includes(req.params.keyword.toLowerCase())
+              req.params.keyword !== "$" &&
+              req.params.subject === "$" &&
+              req.params.category === "$"
             ) {
-              array.push(user);
+              if (
+                String(user.note).toLowerCase() ===
+                  req.params.keyword.toLowerCase() ||
+                String(user.note)
+                  .toLowerCase()
+                  .includes(req.params.keyword.toLowerCase())
+              ) {
+                array.push(user);
+              }
             }
-          }
-          if (
-            req.params.keyword === "$" &&
-            req.params.subject !== "$" &&
-            req.params.category === "$"
-          ) {
-            if (user.subject === req.params.subject) {
-              array.push(user);
-            }
-          }
-          if (
-            req.params.keyword === "$" &&
-            req.params.subject === "$" &&
-            req.params.category !== "$"
-          ) {
-            if (user.category === req.params.category) {
-              array.push(user);
-            }
-          }
-          if (
-            req.params.keyword !== "$" &&
-            req.params.subject !== "$" &&
-            req.params.category === "$"
-          ) {
             if (
-              String(user.note).toLowerCase() ===
-                req.params.keyword.toLowerCase() ||
-              String(user.note)
-                .toLowerCase()
-                .includes(
-                  req.params.keyword.toLowerCase() &&
-                    user.subject === req.params.subject
-                )
+              req.params.keyword === "$" &&
+              req.params.subject !== "$" &&
+              req.params.category === "$"
             ) {
-              array.push(user);
+              if (user.subject === req.params.subject) {
+                array.push(user);
+              }
             }
-          }
-          if (
-            req.params.keyword !== "$" &&
-            req.params.subject === "$" &&
-            req.params.category !== "$"
-          ) {
             if (
-              String(user.note).toLowerCase() ===
-                req.params.keyword.toLowerCase() ||
-              String(user.note)
-                .toLowerCase()
-                .includes(
-                  req.params.keyword.toLowerCase() &&
-                    user.category === req.params.category
-                )
+              req.params.keyword === "$" &&
+              req.params.subject === "$" &&
+              req.params.category !== "$"
             ) {
-              array.push(user);
+              if (user.category === req.params.category) {
+                array.push(user);
+              }
             }
-          }
-          if (
-            req.params.keyword == "$" &&
-            req.params.subject !== "$" &&
-            req.params.category !== "$"
-          ) {
             if (
-              user.subject === req.params.subject &&
-              user.category === req.params.category
+              req.params.keyword !== "$" &&
+              req.params.subject !== "$" &&
+              req.params.category === "$"
             ) {
-              array.push(user);
+              if (
+                String(user.note).toLowerCase() ===
+                  req.params.keyword.toLowerCase() ||
+                String(user.note)
+                  .toLowerCase()
+                  .includes(
+                    req.params.keyword.toLowerCase() &&
+                      user.subject === req.params.subject
+                  )
+              ) {
+                array.push(user);
+              }
             }
-          }
-          if (
-            req.params.keyword !== "$" &&
-            req.params.subject !== "$" &&
-            req.params.category !== "$"
-          ) {
             if (
-              String(user.note).toLowerCase() ===
-                req.params.keyword.toLowerCase() ||
-              String(user.note)
-                .toLowerCase()
-                .includes(
-                  req.params.keyword.toLowerCase() &&
-                    user.subject === req.params.subject &&
-                    user.category === req.params.category
-                )
+              req.params.keyword !== "$" &&
+              req.params.subject === "$" &&
+              req.params.category !== "$"
             ) {
-              array.push(user);
+              if (
+                String(user.note).toLowerCase() ===
+                  req.params.keyword.toLowerCase() ||
+                String(user.note)
+                  .toLowerCase()
+                  .includes(
+                    req.params.keyword.toLowerCase() &&
+                      user.category === req.params.category
+                  )
+              ) {
+                array.push(user);
+              }
             }
-          }
+            if (
+              req.params.keyword == "$" &&
+              req.params.subject !== "$" &&
+              req.params.category !== "$"
+            ) {
+              if (
+                user.subject === req.params.subject &&
+                user.category === req.params.category
+              ) {
+                array.push(user);
+              }
+            }
+            if (
+              req.params.keyword !== "$" &&
+              req.params.subject !== "$" &&
+              req.params.category !== "$"
+            ) {
+              if (
+                String(user.note).toLowerCase() ===
+                  req.params.keyword.toLowerCase() ||
+                String(user.note)
+                  .toLowerCase()
+                  .includes(
+                    req.params.keyword.toLowerCase() &&
+                      user.subject === req.params.subject &&
+                      user.category === req.params.category
+                  )
+              ) {
+                array.push(user);
+              }
+            }
+          });
         });
         return array;
       })
