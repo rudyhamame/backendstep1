@@ -1,11 +1,13 @@
 //For user data
 const express = require("express");
 const UserModel = require("../models/Users");
+const ChatModel = require("../models/Chat");
 const UserRouter = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv/config");
 const checkAuth = require("../check-auth");
+const { Schema } = require("mongoose");
 
 //Login API
 UserRouter.post("/login", function (req, res, next) {
@@ -16,11 +18,6 @@ UserRouter.post("/login", function (req, res, next) {
     .then((user) => {
       if (user) {
         bcrypt.compare(req.body.password, user.info.password, (err, result) => {
-          if (err) {
-            res.status(401).json({
-              message: "Login failed",
-            });
-          }
           if (result) {
             const token = jwt.sign(
               { username: user.info.username, userId: user._id },
@@ -30,7 +27,6 @@ UserRouter.post("/login", function (req, res, next) {
               }
             );
             res.status(201).json({
-              message: "Login successful",
               token: token,
               user: user,
             });
@@ -51,21 +47,12 @@ UserRouter.post("/login", function (req, res, next) {
 
 //SignUp API
 UserRouter.post("/signup", function (req, res, next) {
+  let flag = true;
   UserModel.findOne({ "info.username": req.body.username })
-    .exec()
     .then((user) => {
-      if (user) {
-        res.status(409).json({
-          message:
-            "Username is already taken. Please try again using another username",
-        });
-      } else {
+      if (!user) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            res.status(500).json({
-              error: err,
-            });
-          } else {
+          if (!err) {
             UserModel.create({
               "info.username": req.body.username,
               "info.password": hash,
@@ -73,32 +60,21 @@ UserRouter.post("/signup", function (req, res, next) {
               "info.lastname": req.body.lastname,
               "info.email": req.body.email,
               "info.dob": req.body.dob,
-            })
-              .then(() => {
-                res.status(201).json({
-                  message: "Your account has been created successfully!",
-                });
-              })
-              .catch(next);
+            });
           }
         });
+      } else {
+        flag = false;
       }
-    });
-});
-//PrepareMyChat
-
-UserRouter.put("/addNew/:my_id", function (req, res, next) {
-  UserModel.findByIdAndUpdate(
-    { _id: req.params.my_id },
-    { chat: req.params.my_id },
-    {
-      useFindAndModify: false,
-    }
-  )
-    .exec()
-    .then((response) => {
-      res.json(response);
-    });
+    })
+    .then(() => {
+      if (flag == true) {
+        res.status(201).json();
+      } else {
+        res.status(500).json();
+      }
+    })
+    .catch(next);
 });
 
 //Modifiying User's Connection Status
@@ -111,22 +87,51 @@ UserRouter.put("/connection/:id", function (req, res, next) {
 });
 
 ////////UpdateUser
-UserRouter.get("/update/:id", checkAuth, function (req, res, next) {
+UserRouter.get("/update/:id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.id })
-    .select("token notes friends friend_requests notifications chat posts")
-    .populate("friends", "info.firstname info.lastname status.isConnected")
+    .select(
+      "token friends notifications chat posts terminology study_session status"
+    )
+    .populate("friends")
     .populate("chat")
+    .populate("posts")
     .then((profile) => {
-      res.status(200).json(profile);
+      res.status(200).json({
+        chat: profile.chat.conversation,
+        friends: profile.friends,
+        info: profile.info,
+        token: profile.token,
+        notifications: profile.notifications,
+        posts: profile.posts,
+        terminology: profile.terminology,
+        study_session: profile.study_session,
+        isOnline: profile.status.isConnected,
+      });
     })
     .catch(next);
 });
 
 /////Searching for a user to be a friend
 UserRouter.get("/searchUsers/:name", function (req, res, next) {
-  UserModel.find({ $text: { $search: req.params.name } })
+  UserModel.find({})
+    .select("info.firstname info.lastname info.username")
     .then((users) => {
-      res.json(users);
+      const array = [];
+      users.forEach((user) => {
+        if (
+          user.info.firstname.includes(req.params.name) ||
+          user.info.lastname.includes(req.params.name) ||
+          user.info.username === req.params.name
+        ) {
+          array.push(user);
+        }
+      });
+      return array;
+    })
+    .then((array2) => {
+      res.status(200).json({
+        array: array2,
+      });
     })
     .catch(next);
 });
@@ -251,28 +256,192 @@ UserRouter.post("/posts/:my_id", function (req, res, next) {
     .catch(next);
 });
 /////Searching in posts
-UserRouter.get("/searchPosts/:post/:my_id", function (req, res, next) {
+UserRouter.get(
+  "/searchPosts/:keyword/:subject/:category/:my_id",
+  function (req, res, next) {
+    UserModel.findOne({ _id: req.params.my_id })
+      .then((users) => {
+        const array = [];
+        users.posts.forEach((user) => {
+          if (
+            req.params.keyword !== "$" &&
+            req.params.subject === "$" &&
+            req.params.category === "$"
+          ) {
+            if (
+              String(user.note).toLowerCase() ===
+                req.params.keyword.toLowerCase() ||
+              String(user.note)
+                .toLowerCase()
+                .includes(req.params.keyword.toLowerCase())
+            ) {
+              array.push(user);
+            }
+          }
+          if (
+            req.params.keyword === "$" &&
+            req.params.subject !== "$" &&
+            req.params.category === "$"
+          ) {
+            if (user.subject === req.params.subject) {
+              array.push(user);
+            }
+          }
+          if (
+            req.params.keyword === "$" &&
+            req.params.subject === "$" &&
+            req.params.category !== "$"
+          ) {
+            if (user.category === req.params.category) {
+              array.push(user);
+            }
+          }
+          if (
+            req.params.keyword !== "$" &&
+            req.params.subject !== "$" &&
+            req.params.category === "$"
+          ) {
+            if (
+              String(user.note).toLowerCase() ===
+                req.params.keyword.toLowerCase() ||
+              String(user.note)
+                .toLowerCase()
+                .includes(
+                  req.params.keyword.toLowerCase() &&
+                    user.subject === req.params.subject
+                )
+            ) {
+              array.push(user);
+            }
+          }
+          if (
+            req.params.keyword !== "$" &&
+            req.params.subject === "$" &&
+            req.params.category !== "$"
+          ) {
+            if (
+              String(user.note).toLowerCase() ===
+                req.params.keyword.toLowerCase() ||
+              String(user.note)
+                .toLowerCase()
+                .includes(
+                  req.params.keyword.toLowerCase() &&
+                    user.category === req.params.category
+                )
+            ) {
+              array.push(user);
+            }
+          }
+          if (
+            req.params.keyword == "$" &&
+            req.params.subject !== "$" &&
+            req.params.category !== "$"
+          ) {
+            if (
+              user.subject === req.params.subject &&
+              user.category === req.params.category
+            ) {
+              array.push(user);
+            }
+          }
+          if (
+            req.params.keyword !== "$" &&
+            req.params.subject !== "$" &&
+            req.params.category !== "$"
+          ) {
+            if (
+              String(user.note).toLowerCase() ===
+                req.params.keyword.toLowerCase() ||
+              String(user.note)
+                .toLowerCase()
+                .includes(
+                  req.params.keyword.toLowerCase() &&
+                    user.subject === req.params.subject &&
+                    user.category === req.params.category
+                )
+            ) {
+              array.push(user);
+            }
+          }
+        });
+        return array;
+      })
+      .then((array2) => {
+        console.log(array2);
+        res.status(200).json({
+          array: array2,
+        });
+      })
+      .catch(next);
+  }
+);
+//////////////Terminology post
+UserRouter.post("/newTerminology/:my_id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
-    .then((users) => {
-      const array = [];
-      users.posts.forEach((user) => {
-        if (
-          user.note === req.params.post ||
-          user.note.includes(req.params.post) ||
-          user.subject === req.params.post
-        ) {
-          array.push(user);
-        }
-      });
-      return array;
+    .then((mine) => {
+      mine.terminology.push(req.body);
+      return mine.save();
     })
-    .then((array2) => {
-      res.status(200).json({
-        array: array2,
-      });
+    .then((result) => {
+      if (result) {
+        res.status(201).json(result.terminology.pop());
+      } else {
+        res.status(500).json();
+      }
     })
     .catch(next);
 });
 
+//////////////////////Posting update for a user before leaving app
+UserRouter.put("/isOnline/:id", function (req, res, next) {
+  UserModel.findByIdAndUpdate(
+    { _id: req.params.id },
+    {
+      "status.isConnected": req.body.isConnected,
+    },
+    {
+      useFindAndModify: false,
+    }
+  )
+    .then((response) => {
+      res.status(201).json(response);
+    })
+    .catch(next);
+});
+//////////////////////Posting update for a user before leaving app
+UserRouter.put("/updateBeforeLeave/:id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.id })
+    .then((result) => {
+      result.study_session.push(req.body.study_session);
+      result.save();
+    })
+    .then((response) => {
+      res.status(201).json(response);
+    })
+    .catch(next);
+});
+
+//////////////////////delete a term
+UserRouter.delete(
+  "/deleteTerminology/:termID/:my_id",
+  function (req, res, next) {
+    UserModel.findOne({ _id: req.params.my_id })
+      .then((mine) => {
+        for (var i = 0; i < mine.terminology.length; i++) {
+          if (mine.terminology[i]._id == req.params.termID) {
+            mine.terminology.splice(i, 1);
+          }
+        }
+        return mine.save();
+      })
+      .then((result) => {
+        if (result) {
+          res.status(201).json();
+          console.log(result);
+        }
+      })
+      .catch(next);
+  }
+);
 //Attach all the routes to router\
 module.exports = UserRouter;
