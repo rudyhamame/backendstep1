@@ -446,5 +446,24 @@ UserRouter.delete(
       .catch(next);
   }
 );
+//////////////////////edit a term
+UserRouter.put("/editTerminology/:termID/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((mine) => {
+      for (var i = 0; i < mine.terminology.length; i++) {
+        if (mine.terminology[i]._id == req.params.termID) {
+          mine.terminology.splice(i, 1, req.body);
+        }
+      }
+      return mine.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+        console.log(result);
+      }
+    })
+    .catch(next);
+});
 //Attach all the routes to router\
 module.exports = UserRouter;
