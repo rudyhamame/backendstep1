@@ -468,7 +468,13 @@ UserRouter.put("/editTerminology/:termID/:my_id", function (req, res, next) {
 });
 ///////////////////////////////////////////////TEST
 UserRouter.post("/test", function (req, res, next) {
-  TestModel.create(req.body).catch(next);
+  TestModel.create(req.body)
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+      }
+    })
+    .catch(next);
 });
 //Attach all the routes to router\
 module.exports = UserRouter;
