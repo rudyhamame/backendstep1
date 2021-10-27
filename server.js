@@ -9,6 +9,7 @@ const app = express(); // initialie express
 const UserAPI = require("./routes/UserAPI");
 const ChatAPI = require("./routes/ChatAPI");
 const PostsAPI = require("./routes/PostsAPI");
+const AtomAPI = require("./routes/AtomAPI");
 
 // const PostsAPI = require("./routes/PostsAPI");
 
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use("/api/user", UserAPI);
 app.use("/api/chat", ChatAPI);
 app.use("/api/posts", PostsAPI);
+app.use("/api/atom", AtomAPI);
 
 // app.use("/api/posts", PostsAPI);
 
