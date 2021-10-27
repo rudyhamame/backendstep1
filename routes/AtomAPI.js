@@ -11,9 +11,11 @@ AtomRouter.post("/newAtom/", function (req, res, next) {
 });
 
 AtomRouter.get("/getAtom/", function (req, res, next) {
-  AtomModel.find()
-    .then((result) => {
-      res.status(200).json(result);
+  AtomModel.find({})
+    .then((results) => {
+      results.forEach((result) => {
+        res.json(result);
+      });
     })
     .catch(next);
 });
