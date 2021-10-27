@@ -14,7 +14,8 @@ AtomRouter.get("/getAtom/", function (req, res, next) {
   AtomModel.find({})
     .then((results) => {
       results.forEach((result) => {
-        res.json(result);
+        res.json();
+        return result;
       });
     })
     .catch(next);
