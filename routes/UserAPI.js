@@ -512,14 +512,14 @@ UserRouter.delete(
     UserModel.findById(req.params.my_id)
       .then((mine) => {
         for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
-          if (mine.studyplanner.lectures[i]._id === req.params.lectureId) {
-            mine.studyplanner.lectures.pop();
+          if (mine.studyplanner.lectures[i]._id == req.params.lectureId) {
+            mine.studyplanner.lectures.splice(i, 1);
           }
         }
         return mine.save();
       })
       .then((result) => {
-        res.status(201).json();
+        res.status(201).json(result);
       })
       .catch(next);
   }
