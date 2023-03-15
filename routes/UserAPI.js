@@ -511,11 +511,11 @@ UserRouter.delete(
   function (req, res, next) {
     UserModel.findOne({ _id: req.params.my_id })
       .then((mine) => {
-        mine.studyplanner.lectures.forEach((lecture) => {
-          if (lecture._id === req.params.lectureId) {
+        for (i = 0; i < mine.studyplanner.lectures.length; i++) {
+          if (mine.studyplanner.lectures[i]._id === req.params.lectureId) {
             mine.studyplanner.lectures.pop();
           }
-        });
+        }
         return mine.save();
       })
       .then((result) => {
