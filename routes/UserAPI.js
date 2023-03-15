@@ -506,10 +506,21 @@ UserRouter.get("/retrieveLectures/:my_id", function (req, res, next) {
 });
 
 //////////////////////DeleteLecture
-UserRouter.delete("/deleteLecture/:lectureId", function (req, res, next) {
-  UserModel.findByIdAndDelete(req.params.lectureId)
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch(next);
-});
+UserRouter.delete(
+  "/deleteLecture/:my_id/:lectureId",
+  function (req, res, next) {
+    UserModel.findOne({ _id: req.params.my_id })
+      .then((mine) => {
+        mine.studyplanner.lectures.forEach((lecture) => {
+          if (lecture._id === req.params.lectureId) {
+            mine.studyplanner.lectures.pop();
+          }
+        });
+        return mine.save();
+      })
+      .then((result) => {
+        res.status(201).json(result);
+      })
+      .catch(next);
+  }
+);
