@@ -441,7 +441,6 @@ UserRouter.delete(
       .then((result) => {
         if (result) {
           res.status(201).json();
-          console.log(result);
         }
       })
       .catch(next);
@@ -511,7 +510,7 @@ UserRouter.delete(
   function (req, res, next) {
     UserModel.findOne({ _id: req.params.my_id })
       .then((mine) => {
-        for (var i = 0; i < mine.terminology.length; i++) {
+        for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
           if (mine.studyplanner.lectures[i]._id == req.params.lectureId) {
             mine.studyplanner.lectures.splice(i, 1);
           }
@@ -521,7 +520,6 @@ UserRouter.delete(
       .then((result) => {
         if (result) {
           res.status(201).json();
-          console.log(result);
         }
       })
       .catch(next);
