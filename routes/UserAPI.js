@@ -478,3 +478,20 @@ UserRouter.post("/test", function (req, res, next) {
 });
 //Attach all the routes to router\
 module.exports = UserRouter;
+
+//////////////Lecture post
+UserRouter.post("/addLecture/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((mine) => {
+      mine.studyplanner.lectures.push(req.body);
+      return mine.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json(result.studyplanner.lectures.pop());
+      } else {
+        res.status(500).json();
+      }
+    })
+    .catch(next);
+});

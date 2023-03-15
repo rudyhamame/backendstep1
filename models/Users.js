@@ -24,6 +24,24 @@ const UserSchema = new Schema({
 
   chat: { type: Schema.Types.ObjectId, ref: "chat" },
 
+  studyplanner: {
+    lectures: [
+      {
+        name: { type: String, required: true },
+        subject: { type: String, required: true },
+        instructor_name: { type: String, required: true },
+        library_name: { type: String, required: true },
+        date: {
+          year: { type: String, required: true },
+          term: { type: String, required: true },
+        },
+        status: { type: String, required: true },
+        total_number_of_pages: { type: Number, required: true },
+        finish_number_of_pages: { type: Number, required: true },
+      },
+    ],
+  },
+
   status: {
     isConnected: { type: Boolean, default: false },
   },
