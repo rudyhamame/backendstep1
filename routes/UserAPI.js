@@ -504,3 +504,12 @@ UserRouter.get("/retrieveLectures/:my_id", function (req, res, next) {
     })
     .catch(next);
 });
+
+//////////////////////DeleteLecture
+UserRouter.delete("/deleteLecture/:lectureId", function (req, res, next) {
+  UserModel.findByIdAndDelete(req.params.lectureId)
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch(next);
+});
