@@ -509,9 +509,9 @@ UserRouter.get("/retrieveLectures/:my_id", function (req, res, next) {
 UserRouter.delete(
   "/deleteLecture/:my_id/:lectureId",
   function (req, res, next) {
-    UserModel.findById(req.params.my_id)
+    UserModel.findOne({ _id: req.params.my_id })
       .then((mine) => {
-        for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
+        for (var i = 0; i < mine.terminology.length; i++) {
           if (mine.studyplanner.lectures[i]._id == req.params.lectureId) {
             mine.studyplanner.lectures.splice(i, 1);
           }
@@ -519,7 +519,10 @@ UserRouter.delete(
         return mine.save();
       })
       .then((result) => {
-        res.status(201).json(result);
+        if (result) {
+          res.status(201).json();
+          console.log(result);
+        }
       })
       .catch(next);
   }
