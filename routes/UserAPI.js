@@ -519,7 +519,7 @@ UserRouter.delete(
         return mine.save();
       })
       .then((result) => {
-        res.status(201).json(result);
+        res.status(201).json(result.studyplanner.lectures.pop());
       })
       .catch(next);
   }
