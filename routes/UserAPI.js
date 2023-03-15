@@ -495,3 +495,12 @@ UserRouter.post("/addLecture/:my_id", function (req, res, next) {
     })
     .catch(next);
 });
+
+//////////////RetriveLectures
+UserRouter.get("/retrieveLectures/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((mine) => {
+      res.status(200).json(mine.studyplanner.lectures);
+    })
+    .catch(next);
+});
