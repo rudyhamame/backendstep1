@@ -92,11 +92,12 @@ UserRouter.put("/connection/:id", function (req, res, next) {
 UserRouter.get("/update/:id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.id })
     .select(
-      "token friends notifications chat posts terminology study_session status"
+      "token friends notifications chat posts terminology study_session status lectures"
     )
     .populate("friends")
     .populate("chat")
     .populate("posts")
+    .populate("lectures")
     .then((profile) => {
       res.status(200).json({
         chat: profile.chat.conversation,
@@ -105,6 +106,7 @@ UserRouter.get("/update/:id", function (req, res, next) {
         token: profile.token,
         notifications: profile.notifications,
         posts: profile.posts,
+        lectures: profile.lectures,
         terminology: profile.terminology,
         study_session: profile.study_session,
         isOnline: profile.status.isConnected,
