@@ -511,10 +511,8 @@ UserRouter.delete(
     UserModel.findOne({ _id: req.params.my_id })
       .then((mine) => {
         for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
-          for (var j = 0; j < req.params.numOfLectures; j++) {
-            if (mine.studyplanner.lectures[i]._id == req.params.lectureId[j]) {
-              mine.studyplanner.lectures.splice(i, 1);
-            }
+          for (var j = 0; j < req.params.lectureId.length; j++) {
+            mine.studyplanner.lectures.splice(i, 1);
           }
         }
         return mine.save();
