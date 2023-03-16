@@ -505,23 +505,20 @@ UserRouter.get("/retrieveLectures/:my_id", function (req, res, next) {
 });
 
 //////////////////////DeleteLecture
-UserRouter.delete(
-  "/deleteLecture/:my_id/:lectureId/:numOfLectures",
-  function (req, res, next) {
-    UserModel.findOne({ _id: req.params.my_id })
-      .then((mine) => {
-        for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
-          for (var j = 0; j < req.params.lectureId.length; j++) {
-            mine.studyplanner.lectures.splice(i, 1);
-          }
+UserRouter.delete("/deleteLecture/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((mine) => {
+      for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
+        for (var j = 0; j < req.body.lectures_ids.length; j++) {
+          mine.studyplanner.lectures.splice(i, 1);
         }
-        return mine.save();
-      })
-      .then((result) => {
-        if (result) {
-          res.status(201).json();
-        }
-      })
-      .catch(next);
-  }
-);
+      }
+      return mine.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+      }
+    })
+    .catch(next);
+});
