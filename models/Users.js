@@ -24,9 +24,7 @@ const UserSchema = new Schema({
 
   chat: { type: Schema.Types.ObjectId, ref: "chat" },
 
-  studyplanner: {
-    lectures: [{ type: Schema.Types.ObjectId, ref: "lectures" }],
-  },
+  lectures: [{ type: Schema.Types.ObjectId, ref: "lectures" }],
 
   status: {
     isConnected: { type: Boolean, default: false },
