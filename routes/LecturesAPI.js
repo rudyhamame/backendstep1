@@ -40,7 +40,7 @@ LecturesRouter.post(
 LecturesRouter.get("/retrieveLectures/:my_id", function (req, res, next) {
   LecturesModel.findOne({ _id: req.params.my_id })
     .then((mine) => {
-      res.status(200).json(mine.studyplanner.lectures);
+      res.status(200).json(mine.lectures);
     })
     .catch(next);
 });
@@ -51,9 +51,9 @@ LecturesRouter.delete(
   function (req, res, next) {
     LecturesModel.findOne({ _id: req.params.my_id })
       .then((mine) => {
-        for (var i = 0; i < mine.studyplanner.lectures.length; i++) {
-          if (mine.studyplanner.lectures[i]._id == req.params.lectureId) {
-            mine.studyplanner.lectures.splice(i, 1);
+        for (var i = 0; i < mine.lectures.length; i++) {
+          if (mine.lectures[i]._id == req.params.lectureId) {
+            mine.lectures.splice(i, 1);
           }
         }
         return mine.save();
