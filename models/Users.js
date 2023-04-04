@@ -24,8 +24,35 @@ const UserSchema = new Schema({
 
   chat: { type: Schema.Types.ObjectId, ref: "chat" },
 
-  lectures: [{ type: Schema.Types.ObjectId, ref: "lectures" }],
-
+  keywords: [{ type: Schema.Types.ObjectId, ref: "keywords" }],
+  schoolPlanner: {
+    courses: [
+      {
+        course_name: {},
+        course_component: {},
+        course_dayAndTime: [],
+        course_year: {},
+        course_term: {},
+        course_class: {},
+        course_status: {},
+        course_instructors: [],
+      },
+    ],
+    lectures: [
+      {
+        lecture_name: {},
+        lecture_course: {},
+        lecture_instructor: {},
+        lecture_writer: {},
+        lecture_date: {},
+        lecture_year: {},
+        lecture_term: {},
+        lecture_length: {},
+        lecture_progress: {},
+        lecture_outlines: [],
+      },
+    ],
+  },
   status: {
     isConnected: { type: Boolean, default: false },
   },

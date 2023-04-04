@@ -62,20 +62,26 @@ UserRouter.post("/signup", function (req, res, next) {
               "info.lastname": req.body.lastname,
               "info.email": req.body.email,
               "info.dob": req.body.dob,
-            });
+            })
+              .then((response) => {
+                return response._id;
+              })
+              .then((userID) => {
+                if (flag == true) {
+                  res.status(201).json({
+                    userID: userID,
+                  });
+                } else {
+                  res.status(500).json(user);
+                }
+              });
           }
         });
       } else {
         flag = false;
       }
     })
-    .then(() => {
-      if (flag == true) {
-        res.status(201).json();
-      } else {
-        res.status(500).json();
-      }
-    })
+
     .catch(next);
 });
 
@@ -92,24 +98,22 @@ UserRouter.put("/connection/:id", function (req, res, next) {
 UserRouter.get("/update/:id", function (req, res, next) {
   UserModel.findOne({ _id: req.params.id })
     .select(
-      "token friends notifications chat posts terminology study_session status lectures"
+      "friends notifications chat posts terminology study_session schoolPlanner"
     )
     .populate("friends")
     .populate("chat")
     .populate("posts")
-    .populate("lectures")
+    .populate("schoolPlanner")
     .then((profile) => {
       res.status(200).json({
-        chat: profile.chat.conversation,
+        // chat: profile.chat.conversation,
         friends: profile.friends,
-        info: profile.info,
-        token: profile.token,
         notifications: profile.notifications,
         posts: profile.posts,
-        lectures: profile.lectures,
         terminology: profile.terminology,
         study_session: profile.study_session,
         isOnline: profile.status.isConnected,
+        schoolPlanner: profile.schoolPlanner,
       });
     })
     .catch(next);
@@ -467,9 +471,14 @@ UserRouter.put("/editTerminology/:termID/:my_id", function (req, res, next) {
     })
     .catch(next);
 });
-///////////////////////////////////////////////TEST
-UserRouter.post("/test", function (req, res, next) {
-  TestModel.create(req.body)
+
+//..........ADDING COURSE TO COURSE ARRAY........
+UserRouter.post("/addCourse/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      user.schoolPlanner.courses.push(req.body);
+      return user.save();
+    })
     .then((result) => {
       if (result) {
         res.status(201).json();
@@ -477,5 +486,101 @@ UserRouter.post("/test", function (req, res, next) {
     })
     .catch(next);
 });
+//....................
+//..........ADDING LECTURE TO COURSE ARRAY........
+UserRouter.post("/addLecture/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      user.schoolPlanner.lectures.push(req.body);
+      return user.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+      }
+    })
+    .catch(next);
+});
+//....................
+//..........DELETE COURSE.....................
+UserRouter.delete("/deleteCourse/:my_id/:courseID", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      for (i = 0; i < user.schoolPlanner.courses.length; i++) {
+        if (user.schoolPlanner.courses[i]._id == req.params.courseID) {
+          user.schoolPlanner.courses.splice(i, 1);
+        }
+      }
+      return user.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+      }
+    })
+    .catch(next);
+});
+//...............................................
+//..........DELETE LECTURE.....................
+UserRouter.delete(
+  "/deleteLecture/:my_id/:lectureID",
+  function (req, res, next) {
+    UserModel.findOne({ _id: req.params.my_id })
+      .then((user) => {
+        for (i = 0; i < user.schoolPlanner.lectures.length; i++) {
+          if (user.schoolPlanner.lectures[i]._id == req.params.lectureID) {
+            user.schoolPlanner.lectures.splice(i, 1);
+          }
+        }
+        return user.save();
+      })
+      .then((result) => {
+        if (result) {
+          res.status(201).json();
+        }
+      })
+      .catch(next);
+  }
+);
+//...............................................
+
+//................Edit Course................
+UserRouter.post("/editCourse/:my_id/:courseID", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      for (i = 0; i < user.schoolPlanner.courses.length; i++) {
+        if (user.schoolPlanner.courses[i]._id == req.params.courseID) {
+          user.schoolPlanner.courses.splice(i, 1, req.body);
+        }
+      }
+      return user.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+      }
+    })
+    .catch(next);
+});
+
+//................Edit Lecture................
+UserRouter.post("/editLecture/:my_id/:lectureID", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      for (i = 0; i < user.schoolPlanner.lectures.length; i++) {
+        if (user.schoolPlanner.lectures[i]._id == req.params.lectureID) {
+          user.schoolPlanner.lectures.splice(i, 1, req.body);
+        }
+      }
+      return user.save();
+    })
+    .then((result) => {
+      if (result) {
+        res.status(201).json();
+      }
+    })
+    .catch(next);
+});
+
 //Attach all the routes to router\
 module.exports = UserRouter;

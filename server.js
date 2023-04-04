@@ -10,7 +10,7 @@ const UserAPI = require("./routes/UserAPI");
 const ChatAPI = require("./routes/ChatAPI");
 const PostsAPI = require("./routes/PostsAPI");
 const AtomAPI = require("./routes/AtomAPI");
-const LecturesAPI = require("./routes/LecturesAPI");
+const KeywordsAPI = require("./routes/KeywordsAPI");
 
 // const PostsAPI = require("./routes/PostsAPI");
 
@@ -38,7 +38,7 @@ app.use("/api/user", UserAPI);
 app.use("/api/chat", ChatAPI);
 app.use("/api/posts", PostsAPI);
 app.use("/api/atom", AtomAPI);
-app.use("/api/lectures", LecturesAPI);
+app.use("/api/keywords", KeywordsAPI);
 
 // app.use("/api/posts", PostsAPI);
 
