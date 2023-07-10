@@ -23,8 +23,6 @@ const UserSchema = new Schema({
   friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
   chat: { type: Schema.Types.ObjectId, ref: "chat" },
-
-  keywords: [{ type: Schema.Types.ObjectId, ref: "keywords" }],
   schoolPlanner: {
     courses: [
       {
@@ -36,6 +34,13 @@ const UserSchema = new Schema({
         course_class: {},
         course_status: {},
         course_instructors: [],
+        course_grade: {},
+        course_fullGrade: {},
+        course_length: {},
+        course_progress: {},
+        course_partOfPlan: {},
+        exam_date: {},
+        exam_time: {},
       },
     ],
     lectures: [
@@ -45,11 +50,66 @@ const UserSchema = new Schema({
         lecture_instructor: {},
         lecture_writer: {},
         lecture_date: {},
-        lecture_year: {},
-        lecture_term: {},
         lecture_length: {},
         lecture_progress: {},
+        lecture_pagesFinished: [],
         lecture_outlines: [],
+        lecture_partOfPlan: {},
+        lecture_hidden: {},
+      },
+    ],
+  },
+  study: {
+    inMemory: {
+      units: [],
+      dataTypes: [],
+      sets: [],
+    },
+    propertyObjects: [
+      {
+        propertyName: {},
+        propertyLevel: {},
+        propertyDataType: {},
+        propertyDomain: {},
+        propertyUnit: {},
+      },
+    ],
+    functionNatures: [
+      {
+        name: {},
+      },
+    ],
+    functionCodes: [
+      {
+        name: {},
+      },
+    ],
+    changeFactors: [
+      {
+        name: {},
+      },
+    ],
+    structure_keywords: [
+      {
+        keyword_structureName: {},
+        keyword_structureSource: {},
+        keyword_structureStatus: {},
+        keyword_structureLevel: {},
+        keyword_structureProperties: [],
+      },
+    ],
+    function_keywords: [
+      {
+        keyword_functionName: {},
+        keyword_functionNature: {},
+        keyword_functionCode: [],
+      },
+    ],
+    statements: [
+      {
+        statement_subjectProperty: {},
+        statement_verb: {},
+        statement_objectProperty: {},
       },
     ],
   },
