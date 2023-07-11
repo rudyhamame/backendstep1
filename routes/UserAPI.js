@@ -60,8 +60,8 @@ UserRouter.post("/signup", function (req, res, next) {
               "info.password": hash,
               "info.firstname": req.body.firstname,
               "info.lastname": req.body.lastname,
-              "info.email": req.body.email,
-              "info.dob": req.body.dob,
+              // "info.email": req.body.email,
+              // "info.dob": req.body.dob,
             })
               .then((response) => {
                 return response._id;
