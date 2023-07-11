@@ -837,20 +837,23 @@ UserRouter.post(
 );
 //................setPageFinishLecture................
 UserRouter.put(
-  "/setPageFinishLecture/:my_id/:lectureID/:boolean",
+  "/setPageFinishLecture/:my_id/:lectureID",
   function (req, res, next) {
     UserModel.findOne({ _id: req.params.my_id })
       .then((user) => {
         var lectureFound;
+        var index;
+        var pagenumber = req.body.pageNum;
         for (var i = 0; i < user.schoolPlanner.lectures.length; i++) {
           if (user.schoolPlanner.lectures[i]._id == req.params.lectureID) {
             lectureFound = user.schoolPlanner.lectures[i];
-            let index = user.schoolPlanner.lectures[
-              i
-            ].lecture_pagesFinished.indexOf(req.body.pageNum);
+            index =
+              user.schoolPlanner.lectures[i].lecture_pagesFinished.indexOf(
+                pagenumber
+              );
             if (index == -1) {
               user.schoolPlanner.lectures[i].lecture_pagesFinished.push(
-                req.body.pageNum
+                pagenumber
               );
             } else {
               user.schoolPlanner.lectures[i].lecture_pagesFinished.splice(
@@ -863,13 +866,15 @@ UserRouter.put(
           }
         }
         user.save();
-        return lectureFound;
+        return {
+          lectureFound: lectureFound,
+          pagenumber: pagenumber,
+          index: index,
+        };
       })
-      .then((lectureFound) => {
-        if (lectureFound) {
-          res.status(201).json({
-            lectureFound: lectureFound,
-          });
+      .then((object) => {
+        if (object) {
+          res.status(201).json(object);
         }
       })
       .catch(next);

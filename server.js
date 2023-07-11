@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
 const app = express(); // initialie express
-////////////////////////////////////////
-
+//////////////////////////////////////
 /////////////////////////////////////////////////////////////
 const UserAPI = require("./routes/UserAPI");
 const ChatAPI = require("./routes/ChatAPI");
