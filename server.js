@@ -31,7 +31,6 @@ db.once("open", function () {
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-
 //initialize routes
 app.use("/api/user", UserAPI);
 app.use("/api/chat", ChatAPI);

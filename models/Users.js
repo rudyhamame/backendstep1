@@ -19,7 +19,7 @@ const UserSchema = new Schema({
     // },
     // dob: { type: Date, required: false },
   },
-
+  // telegram: [],
   friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
   chat: { type: Schema.Types.ObjectId, ref: "chat" },

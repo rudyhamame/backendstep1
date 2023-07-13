@@ -1,8 +1,6 @@
 //For user data
 const express = require("express");
-const TestModel = require("../models/Test");
 const UserModel = require("../models/Users");
-const ChatModel = require("../models/Chat");
 const UserRouter = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -10,7 +8,39 @@ require("dotenv/config");
 const checkAuth = require("../check-auth");
 const { Schema } = require("mongoose");
 const PostsModel = require("../models/Posts");
+// const telegram = require("../helpers/telegram");
 
+// //........TELEGRAM API......
+// UserRouter.get("/telegram/:my_id/:peerID", function (req, res, next) {
+//   UserModel.findOne({ _id: req.params.my_id })
+//     .then((user) => {
+//       if (user) res.status(200);
+//     })
+//     .then(() => {
+//       const messages = telegram(req.params.peerID);
+//       return messages;
+//     })
+//     .then((messages) => {
+//       res.json({ messages: messages });
+//       // console.log(messages);
+//     })
+//     .catch(next);
+// });
+// //...........................
+// //........TELEGRAM API......
+// UserRouter.post("/telegram/:my_id", function (req, res, next) {
+//   UserModel.findOne({ _id: req.params.my_id })
+//     .then((user) => {
+//       if (user) res.status(201);
+//       return user;
+//     })
+//     .then((user) => {
+//       user.telegram.push(req.body.message);
+//       user.save();
+//     })
+//     .catch(next);
+// });
+// //...........................
 //Login API
 UserRouter.post("/login", function (req, res, next) {
   UserModel.findOne({
