@@ -619,6 +619,14 @@ UserRouter.post("/addMemory/:my_id/:type", function (req, res, next) {
         user.study.inMemory.units.push(req.body.object);
         return user.save();
       }
+      let functionInMemory = [];
+      if (req.params.type == "functionName_inMemory") {
+        user.study.inMemory.functionNames.push(req.body.object);
+        functionInMemorys = user.study.inMemory.functionNames.sort((a, b) =>
+          a.name > b.name ? -1 : 1
+        );
+        return user.save();
+      }
       if (req.params.type == "dataType_inMemory") {
         user.study.inMemory.dataTypes.push(req.body.object);
         return user.save();
@@ -650,6 +658,14 @@ UserRouter.delete(
             }
           }
         }
+        if (req.params.type == "functionName_inMemory") {
+          for (var i = 0; i < user.study.inMemory.functionNames.length; i++) {
+            if (i == req.params.memoryID) {
+              user.study.inMemory.functionNames.splice(i, 1);
+              return user.save();
+            }
+          }
+        }
         if (req.params.type == "dataType_inMemory") {
           for (var i = 0; i < user.study.inMemory.dataTypes.length; i++) {
             if (i == req.params.memoryID) {
@@ -676,31 +692,46 @@ UserRouter.delete(
   }
 );
 //////////////////////delete unit
-UserRouter.put("/editMemory/:my_id/:memoryID/:type", function (req, res, next) {
+UserRouter.put("/editMemory/:my_id/:itemId/:type", function (req, res, next) {
   UserModel.findOne({ _id: req.params.my_id })
     .then((user) => {
       if (req.params.type == "unit_inMemory") {
         for (var i = 0; i < user.study.inMemory.units.length; i++) {
-          if (i == req.params.memoryID) {
-            user.study.inMemory.units.splice(i, 1, req.body.object);
-            return user.save();
-          }
+          user.study.inMemory.units.splice(
+            user.study.inMemory.units.indexOf(req.body.object),
+            1,
+            req.body.object
+          );
+          return user.save();
+        }
+      }
+      if (req.params.type == "functionName_inMemory") {
+        for (var i = 0; i < user.study.inMemory.functionNames.length; i++) {
+          user.study.inMemory.functionNames.splice(
+            req.params.itemId,
+            1,
+            req.body.object
+          );
+          return user.save();
         }
       }
       if (req.params.type == "dataType_inMemory") {
         for (var i = 0; i < user.study.inMemory.dataTypes.length; i++) {
-          if (i == req.params.memoryID) {
-            user.study.inMemory.dataTypes.splice(i, 1, req.body.object);
-            return user.save();
-          }
+          user.study.inMemory.dataTypes.splice(
+            user.study.inMemory.dataTypes.indexOf(req.body.object),
+            1,
+            req.body.object
+          );
+          return user.save();
         }
       }
       if (req.params.type == "set_inMemory") {
         for (var i = 0; i < user.study.inMemory.sets.length; i++) {
-          if (i == req.params.memoryID) {
-            user.study.inMemory.sets.splice(i, 1);
-            return user.save();
-          }
+          user.study.inMemory.sets.splice(
+            user.study.inMemory.sets.indexOf(req.body.object),
+            1
+          );
+          return user.save();
         }
       }
     })
@@ -739,9 +770,9 @@ UserRouter.post("/addCourse/:my_id", function (req, res, next) {
       user.schoolPlanner.courses.push(req.body);
       return user.save();
     })
-    .then((result) => {
-      if (result) {
-        res.status(201).json();
+    .then((user) => {
+      if (user) {
+        res.status(201).json(user.schoolPlanner.courses);
       }
     })
     .catch(next);
@@ -773,9 +804,9 @@ UserRouter.delete("/deleteCourse/:my_id/:courseID", function (req, res, next) {
       }
       return user.save();
     })
-    .then((result) => {
-      if (result) {
-        res.status(201).json();
+    .then((user) => {
+      if (user) {
+        res.status(201).json(user.schoolPlanner.courses);
       }
     })
     .catch(next);
@@ -819,6 +850,19 @@ UserRouter.post("/editCourse/:my_id/:courseID", function (req, res, next) {
       if (result) {
         res.status(201).json();
       }
+    })
+    .catch(next);
+});
+
+//................ADD EXAM................
+UserRouter.post("/addExam/:my_id", function (req, res, next) {
+  UserModel.findOne({ _id: req.params.my_id })
+    .then((user) => {
+      user.schoolPlanner.exams.push(req.body);
+      return user.save();
+    })
+    .then((result) => {
+      if (result) res.status(201).json();
     })
     .catch(next);
 });

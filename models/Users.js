@@ -21,26 +21,74 @@ const UserSchema = new Schema({
   },
   // telegram: [],
   friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
-
   chat: { type: Schema.Types.ObjectId, ref: "chat" },
   schoolPlanner: {
     courses: [
       {
-        course_name: {},
-        course_component: {},
-        course_dayAndTime: [],
-        course_year: {},
-        course_term: {},
-        course_class: {},
-        course_status: {},
-        course_instructors: [],
-        course_grade: {},
-        course_fullGrade: {},
-        course_length: {},
-        course_progress: {},
-        course_partOfPlan: {},
-        exam_date: {},
-        exam_time: {},
+        general: {
+          name: {},
+          year: {},
+          term: {},
+          discipline: {},
+          status: {},
+          grade: {},
+          partOfStudyPlan: {},
+        },
+        lectureFormat: {
+          schedule: [],
+          location: {},
+          progress: {
+            pagesTotal: {},
+            pagesFinished: {},
+            pagesUnfinished: {},
+            pagesDailyTarget: {},
+          },
+          instructors: [],
+        },
+        practicalFormat: {
+          type: {},
+          schedule: {
+            startDate: {},
+            endDate: {},
+            type: {
+              intervals: [
+                {
+                  startDate: {
+                    day: {},
+                    month: {},
+                    year: {},
+                  },
+                  endDate: {
+                    day: {},
+                    month: {},
+                    year: {},
+                  },
+                  time: {},
+                  status: {},
+                },
+              ],
+              days: [
+                {
+                  day: {},
+                  month: {},
+                  year: {},
+                  time: {},
+                  repeated: { type: Boolean },
+                  status: {},
+                },
+              ],
+            },
+          },
+          location: {},
+          status: {},
+          instructors: [],
+          progress: {
+            pagesTotal: {},
+            pagesFinished: {},
+            pagesUnfinished: {},
+            pagesDailyTarget: {},
+          },
+        },
       },
     ],
     lectures: [
@@ -58,12 +106,23 @@ const UserSchema = new Schema({
         lecture_hidden: {},
       },
     ],
+    exams: [],
+    memory: {
+      instructors: [],
+    },
   },
   study: {
     inMemory: {
       units: [],
       dataTypes: [],
       sets: [],
+      functionNames: [
+        {
+          name: {},
+          class: {},
+          family: {},
+        },
+      ],
     },
     propertyObjects: [
       {
@@ -89,7 +148,7 @@ const UserSchema = new Schema({
         name: {},
       },
     ],
-    structure_keywords: [
+    structures: [
       {
         keyword_structureName: {},
         keyword_structureSource: {},
